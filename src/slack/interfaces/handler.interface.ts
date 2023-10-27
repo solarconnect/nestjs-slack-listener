@@ -1,8 +1,8 @@
-import { SlackEventType } from '../types/event';
 import {
   IncomingSlackEvent,
   IncomingSlackInteractivity,
 } from './incoming.interface';
+import { SlackEventType } from '../types/event';
 
 export type SlackEventHandlerConfig = {
   eventType?: SlackEventType;
