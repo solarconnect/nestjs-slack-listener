@@ -34,6 +34,11 @@ type SlackInteractivityHandlerSubMethodConfig = Omit<
 > &
   DecoratorParams;
 
+/**
+ * Slack Event Message Handling 용 Method Decorator
+ * @param params
+ * @constructor
+ */
 export function SlackEventHandler<Event = DefaultSlackEvent>(
   params:
     | {
@@ -45,6 +50,7 @@ export function SlackEventHandler<Event = DefaultSlackEvent>(
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     let eventType;
     let filter;
+    // { eventType, filter}
     if (typeof params === 'object') {
       eventType = params.eventType;
       filter = params.filter;
@@ -64,6 +70,11 @@ export function SlackEventHandler<Event = DefaultSlackEvent>(
   };
 }
 
+/**
+ * Slack Event Listener Class Decorator
+ * @param listenerFilter
+ * @constructor
+ */
 export function SlackEventListener(
   listenerFilter: (event: IncomingSlackEvent) => boolean = () => true,
 ) {
@@ -93,6 +104,11 @@ export function SlackEventListener(
   };
 }
 
+/**
+ * Slack Interactivity Message Handling 용 Method Decorator
+ * @param params
+ * @constructor
+ */
 export function SlackInteractivityHandler(
   params:
     | {
@@ -123,6 +139,10 @@ export function SlackInteractivityHandler(
   };
 }
 
+/**
+ * Slack Interactivity Listener Method Decorator
+ * @constructor
+ */
 export function SlackInteractivityListener() {
   return function _<T extends { new (...args: any[]): any }>(Base: T) {
     return class extends Base {

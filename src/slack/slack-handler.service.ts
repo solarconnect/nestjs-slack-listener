@@ -77,6 +77,10 @@ export class SlackHandler {
     return handler(payload);
   }
 
+  /**
+   * Event Request 대응 메서드
+   * @param event
+   */
   async handleEvent(event: IncomingSlackEvent) {
     return Promise.all(
       this._eventHandlers.map(
@@ -86,6 +90,10 @@ export class SlackHandler {
     );
   }
 
+  /**
+   * Interactivity Request 대응 메서드
+   * @param payload
+   */
   async handleInteractivity(payload: IncomingSlackInteractivity) {
     const response = await Promise.all(
       this._interactivityHandlers.map(
@@ -95,7 +103,7 @@ export class SlackHandler {
     );
 
     const filtered = response.filter((elements) => {
-      return elements != null && elements !== undefined && elements !== '';
+      return elements != null && elements !== '';
     });
 
     return filtered.length == 1 ? filtered[0] : filtered;

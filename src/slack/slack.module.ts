@@ -57,6 +57,10 @@ export class SlackModule implements OnModuleInit {
     };
   }
 
+  /**
+   *
+   * @private
+   */
   private static createSlackClientProvider(): Provider {
     return {
       provide: SLACK_CLIENT,
@@ -66,6 +70,11 @@ export class SlackModule implements OnModuleInit {
     };
   }
 
+  /**
+   *
+   * @param options
+   * @private
+   */
   private static createAsyncProviders(
     options: SlackModuleAsyncOptions,
   ): Provider[] {

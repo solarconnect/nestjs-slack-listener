@@ -18,6 +18,10 @@ export class SlackHandlerExplorer {
     private readonly metadataScanner: MetadataScanner,
   ) {}
 
+  /**
+   * IoC Container 에 등록된 Module 내 Controller 중
+   * SlackEventListener, SlackInteractivityListener Decorator 를 사용한 Controller List 리턴 함수
+   */
   public explore(): {
     eventHandlers: SlackEventHandlerConfig[];
     interactivityHandlers: SlackInteractivityHandlerConfig[];
@@ -74,6 +78,12 @@ export class SlackHandlerExplorer {
     };
   }
 
+  /**
+   * SlackEventListener() Decorator 를 사용한 Controller 조회 함수
+   * @param instance
+   * @param instancePrototype
+   * @param methodKey
+   */
   public exploreEventHandler(
     instance: object,
     instancePrototype: Controller,
@@ -87,6 +97,12 @@ export class SlackHandlerExplorer {
     return handler;
   }
 
+  /**
+   * SlackInteractivityListener() Decorator 를 사용한 Controller 조회 함수
+   * @param instance
+   * @param instancePrototype
+   * @param methodKey
+   */
   public exploreInteractivityHandler(
     instance: object,
     instancePrototype: Controller,
