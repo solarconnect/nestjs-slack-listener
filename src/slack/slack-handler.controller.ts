@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { IncomingSlackEvent } from './interfaces';
 import { SlackHandler } from './slack-handler.service';
 
@@ -23,10 +24,18 @@ export class SlackEventsController {
 
   /**
    * interactivity request 용 EndPoint
+   * retry 방지용 코드 추가
+   * https://api.slack.com/apis/connections/events-api#error-handling
    * @param params
+   * @param response
    */
   @Post(`interactivity`)
-  async handleInteractivity(@Body() params: { payload: string }) {
-    return this.slackHandler.handleInteractivity(JSON.parse(params.payload));
+  async handleInteractivity(
+    @Body() params: { payload: string },
+    @Res() response: Response,
+  ) {
+    const parsedPayload = JSON.parse(params.payload);
+    await this.slackHandler.handleInteractivity(parsedPayload);
+    return response.status(200).send();
   }
 }
