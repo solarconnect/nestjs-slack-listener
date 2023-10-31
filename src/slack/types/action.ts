@@ -10,5 +10,6 @@ export type KnownAction = {
   action_ts: string;
   selected_option?: any;
   selected_user?: string;
+  selected_time?: string;
   initial_option?: any;
 }; // TODO
