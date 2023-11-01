@@ -48,44 +48,39 @@ export class SlackHandlerExplorer {
       eventHandlers: instanceWrappers
         .map(({ instance }) => {
           const instancePrototype = Object.getPrototypeOf(instance);
-          return this.metadataScanner.scanFromPrototype(
-            instance,
-            instancePrototype,
-            (method) =>
-              this.exploreEventHandler(instance, instancePrototype, method),
-          );
+          return this.metadataScanner
+            .getAllMethodNames(instancePrototype)
+            .map((method) => {
+              return this.exploreEventHandler(instancePrototype, method);
+            });
         })
-        .reduce((prev, curr) => {
-          return prev.concat(curr);
+        .reduce((previous, current) => {
+          return previous.concat(current);
         }),
       interactivityHandlers: instanceWrappers
         .map(({ instance }) => {
           const instancePrototype = Object.getPrototypeOf(instance);
-          return this.metadataScanner.scanFromPrototype(
-            instance,
-            instancePrototype,
-            (method) =>
-              this.exploreInteractivityHandler(
-                instance,
+          return this.metadataScanner
+            .getAllMethodNames(instancePrototype)
+            .map((method) => {
+              return this.exploreInteractivityHandler(
                 instancePrototype,
                 method,
-              ),
-          );
+              );
+            });
         })
-        .reduce((prev, curr) => {
-          return prev.concat(curr);
+        .reduce((previous, current) => {
+          return previous.concat(current);
         }),
     };
   }
 
   /**
    * SlackEventListener() Decorator 를 사용한 Controller 조회 함수
-   * @param instance
    * @param instancePrototype
    * @param methodKey
    */
   public exploreEventHandler(
-    instance: object,
     instancePrototype: Controller,
     methodKey: string,
   ): SlackEventHandlerConfig | null {
@@ -99,12 +94,10 @@ export class SlackHandlerExplorer {
 
   /**
    * SlackInteractivityListener() Decorator 를 사용한 Controller 조회 함수
-   * @param instance
    * @param instancePrototype
    * @param methodKey
    */
   public exploreInteractivityHandler(
-    instance: object,
     instancePrototype: Controller,
     methodKey: string,
   ): SlackInteractivityHandlerConfig | null {
