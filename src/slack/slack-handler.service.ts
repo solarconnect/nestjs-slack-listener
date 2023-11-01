@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   IncomingSlackEvent,
   IncomingSlackInteractivity,
+  IncomingSlackViewInteractivity,
   SlackEventHandlerConfig,
   SlackInteractivityHandlerConfig,
 } from './interfaces';
@@ -49,22 +50,30 @@ export class SlackHandler {
     return handler(event);
   }
 
+  checkInteractivityType(
+    payload: IncomingSlackInteractivity | IncomingSlackViewInteractivity,
+  ): payload is IncomingSlackViewInteractivity {
+    return payload.type === 'view_submission';
+  }
+
   async handleSingleInteractivity(
-    payload: IncomingSlackInteractivity,
+    payload: IncomingSlackInteractivity | IncomingSlackViewInteractivity,
     handlerConfig: SlackInteractivityHandlerConfig,
   ) {
     const { actionId, filter, handler } = handlerConfig;
 
-    if (actionId) {
-      if (
-        payload.actions &&
-        payload.actions.filter((action) => action.action_id == actionId)
-          .length == 0
-      ) {
-        return;
+    if (!this.checkInteractivityType(payload)) {
+      if (actionId) {
+        if (
+          payload.actions.filter((action) => action.action_id == actionId)
+            .length == 0
+        ) {
+          return;
+        }
       }
-      if (payload.view && payload.view.callback_id != actionId) {
-        return;
+    } else {
+      if (actionId) {
+        if (payload.view.callback_id !== actionId) return;
       }
     }
 
@@ -94,7 +103,9 @@ export class SlackHandler {
    * Interactivity Request 대응 메서드
    * @param payload
    */
-  async handleInteractivity(payload: IncomingSlackInteractivity) {
+  async handleInteractivity(
+    payload: IncomingSlackInteractivity | IncomingSlackViewInteractivity,
+  ) {
     const response = await Promise.all(
       this._interactivityHandlers.map(
         async (handlerConfig) =>

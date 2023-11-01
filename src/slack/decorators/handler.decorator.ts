@@ -7,6 +7,7 @@ import {
   DefaultSlackEvent,
   IncomingSlackEvent,
   IncomingSlackInteractivity,
+  IncomingSlackViewInteractivity,
   SlackEventHandlerConfig,
   SlackInteractivityHandlerConfig,
 } from '../interfaces';
@@ -113,7 +114,9 @@ export function SlackInteractivityHandler(
   params:
     | {
         actionId?: string;
-        filter?: (event: IncomingSlackInteractivity) => boolean;
+        filter?: (
+          event: IncomingSlackInteractivity | IncomingSlackViewInteractivity,
+        ) => boolean;
       }
     | string,
 ) {

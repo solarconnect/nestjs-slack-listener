@@ -1,5 +1,7 @@
-import { View, KnownBlock } from '@slack/web-api';
+import { View, KnownBlock, Block } from '@slack/web-api';
+import { Enterprise } from '@slack/web-api/dist/response/OauthV2AccessResponse';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
+import { Close, State } from '@slack/web-api/dist/response/ViewsOpenResponse';
 import { KnownAction } from '../types/action';
 import { SlackEventType } from '../types/event';
 
@@ -117,4 +119,43 @@ export interface IncomingSlackInteractivity {
   response_url: string;
   actions?: KnownAction[];
   view?: View;
+}
+
+export interface IncomingSlackViewInteractivity {
+  type: string;
+  user: {
+    id: string;
+    username: string;
+    name: string;
+    team_id: string;
+  };
+  team: {
+    id: string;
+    domain: string;
+  };
+  view: {
+    id: string;
+    team_id: string;
+    type: 'modal';
+    blocks: Block[];
+    private_metadata: string;
+    callback_id: string;
+    state: State;
+    hash: string;
+    title: Close;
+    clear_on_close: boolean;
+    notify_on_close: boolean;
+    close: Close;
+    submit: Close;
+    previous_view_id: string;
+    root_view_id: string;
+    app_id: string;
+    external_id: string;
+    app_installed_team_id: string;
+    bot_id: string;
+  };
+  hash: string;
+  response_urls: string[];
+  is_enterprise_install: boolean;
+  enterprise: Enterprise;
 }
