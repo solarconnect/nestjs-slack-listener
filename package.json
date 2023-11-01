@@ -1,6 +1,6 @@
 {
-  "name": "nestjs-slack-listener",
-  "version": "1.2.0",
+  "name": "@enlighten/nestjs-slack-listener",
+  "version": "1.2.1",
   "description": "NestJS Slack listeners and handlers",
   "author": "jjeerryy <sagnjae.kim@enlighten.kr>",
   "license": "MIT",
